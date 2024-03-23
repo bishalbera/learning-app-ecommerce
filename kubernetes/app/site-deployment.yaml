@@ -41,5 +41,19 @@ spec:
             configMapKeyRef:
               key: FEATURE_DARK_MODE
               name: feature-toggle-config
+        livenessProbe:
+          httpGet:
+            path: /healthcheck.php
+            port: 80
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+          periodSeconds: 15
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /db_healthcheck.php
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
         ports:
         - containerPort: 80
