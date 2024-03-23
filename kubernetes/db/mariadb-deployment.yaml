@@ -31,7 +31,7 @@ spec:
               name: mariadb-secret
         volumeMounts:
           - name: mariadb-initdb
-            mountPath: /docker-entrypoiont-initdb.d
+            mountPath: /docker-entrypoint-initdb.d
       volumes:
       - name: mariadb-initdb
         configMap:
