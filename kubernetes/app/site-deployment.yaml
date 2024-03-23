@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: site-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: site-deployment
+  template:
+    metadata:
+      labels:
+        app: site-deployment
+    spec:
+      containers:
+      - name: ecom-site
+        image: bishal2469/my_php_app:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: DB_HOST
+              name: site-configmap
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: DB_USER
+              name: site-configmap
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: DB_NAME
+              name: site-configmap
+        - name: DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: password
+              name: site-secret
+        - name: FEATURE_DARK_MODE
+          valueFrom:
+            configMapKeyRef:
+              key: FEATURE_DARK_MODE
+              name: feature-toggle-config
+        ports:
+        - containerPort: 80
