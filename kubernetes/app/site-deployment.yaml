@@ -15,10 +15,6 @@ spec:
       containers:
       - name: ecom-site
         image: bishal2469/my_php_app:v1
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         env:
         - name: DB_HOST
           valueFrom:
