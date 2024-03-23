@@ -37,7 +37,7 @@ spec:
               name: site-configmap
         - name: DB_PASSWORD
           valueFrom:
-            configMapKeyRef:
+            secretKeyRef:
               key: password
               name: site-secret
         - name: FEATURE_DARK_MODE
