@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.database.configmap.initsql.name }}
+  name: {{ .Values.database.configmap.initsql.fullname }}
 data:
   initdb.sql: |
     CREATE DATABASE IF NOT EXISTS ecomdb;
