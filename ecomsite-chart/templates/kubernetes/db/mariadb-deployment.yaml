@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: mariadb
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: {{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}
         resources: {}
         ports:
         - containerPort: {{ .Values.database.port | default 3306 }}
