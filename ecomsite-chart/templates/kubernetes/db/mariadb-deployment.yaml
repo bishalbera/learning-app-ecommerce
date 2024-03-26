@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.database.name }}
+spec:
+{{- if .Values.database.replicas }}
+  replicas: {{ .Values.database.replicas | default 1 }}
+{{- else }}
+  replicas: {{ .Values.replicaCount | default 1 }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- toYaml .Values.database.labels | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- toYaml .Values.database.labels | nindent 8 }}
+    spec:
+      containers:
+      - name: mariadb
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        resources: {}
+        ports:
+        - containerPort: {{ .Values.database.port | default 3306 }}
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: {{ .Values.database.secret.name }}
+        - name: MARIADB_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: {{ .Values.database.secret.name }}
+        volumeMounts:
+          - name: mariadb-initdb
+            mountPath: /docker-entrypoint-initdb.d
+          - name: pvc-storage
+            mountPath: var/lib/mysql
+      volumes:
+      - name: mariadb-initdb
+        configMap:
+          name: {{ .Values.database.configmap.initsql.fullname }}
+      - name: pvc-storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.database.storage.persistentVolumeClaimName }}

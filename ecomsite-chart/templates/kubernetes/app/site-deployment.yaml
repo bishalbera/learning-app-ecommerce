@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.site.name }}
+spec:
+{{- if .Values.site.replicas }}
+  replicas: {{ .Values.site.replicas | default 1 }}
+{{- else }}
+  replicas: {{ .Values.replicaCount | default 1 }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- toYaml .Values.site.labels | nindent 6}}
+  template:
+    metadata:
+      labels:
+        {{- toYaml .Values.site.labels | nindent 8}}
+    spec:
+      containers:
+      - name: ecom-site
+        image: {{ .Values.site.image.repository }}:{{ .Values.site.image.tag }}
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: DB_HOST
+              name: {{ .Values.site.configmap.env.name }}
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: DB_USER
+              name: {{ .Values.site.configmap.env.name }}
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: DB_NAME
+              name: {{ .Values.site.configmap.env.name }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: {{ .Values.site.secret.name }}
+        - name: FEATURE_DARK_MODE
+          valueFrom:
+            configMapKeyRef:
+              key: FEATURE_DARK_MODE
+              name: {{ .Values.site.configmap.featureToggle.name }}
+        livenessProbe:
+          httpGet:
+            path: /healthcheck.php
+            port: 80
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+          periodSeconds: 15
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /db_healthcheck.php
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: {{ .Values.site.port }}

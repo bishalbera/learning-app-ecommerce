@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.site.service.name }}
+spec:
+  type: {{ .Values.site.service.type }}
+  selector:
+    app: site-deployment
+  ports:
+  - port: {{ .Values.site.service.port }}
+    protocol: TCP
+    targetPort: 80

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.site.configmap.env.name }}
+data:
+  DB_NAME: "ecomdb"
+  DB_USER: "m_user"
+  DB_HOST: {{ .Values.database.service.name }}
