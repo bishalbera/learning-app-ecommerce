@@ -34,7 +34,9 @@ jobs:
      - name: Set up Helm
        uses: azure/setup-helm@v3
      - name: Decode AKS credentials
-       run: echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+       run: 
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
      - name: Helm Upgrade and Deploy
        run: helm upgrade --install ecomsite ./ecomsite-chart --set image.repository=bishal2469/my_php_app,image.tag=latest
          
