@@ -5,7 +5,7 @@ metadata:
 spec:
   type: {{ .Values.site.service.type }}
   selector:
-    app: site-deployment
+    {{- toYaml .Values.site.labels | nindent 4 }}
   ports:
   - port: {{ .Values.site.service.port }}
     protocol: TCP
