@@ -1,0 +1,1 @@
+This project is a part of the [Kubernetes Resume Challenge](https://cloudresumechallenge.dev/docs/extensions/kubernetes-challenge/). Please check out the detailed [blog here](https://biplab24.hashnode.dev/deploying-a-simple-e-commerce-website-on-aks).
